@@ -1,0 +1,46 @@
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class InventoryTest
+{
+    private static final String TEST_DATABASE_FILE_PATH = "guitars_database.txt";
+    private InventoryRepository inventoryRepository;
+
+    @BeforeEach
+    void setUp() {
+        inventoryRepository = new InventoryRepository(TEST_DATABASE_FILE_PATH);
+    }
+
+    @Test
+    public void testAddGuitar()
+    {
+        Guitar guitar = new Guitar("123", 50, "Jimmy", "B", "Electric", "Maple", "Alder");
+        Guitar guitar2 = new Guitar("1234", 500, "JimmyS", "C", "Electric", "Maple", "Alder");
+        inventoryRepository.addGuitar(guitar);
+        nventoryRepository.addGuitar(guitar2);
+        List<String> lines = Files.readAllLines(Path.of(TEST_DATABASE_FILE_PATH));
+        assertEquals(1, lines.size());
+        assertEquals(guitar.toString(), lines.get(0));
+        assertEquals(guitar2.toString(), lines.get(0));
+    }
+
+    @Test
+    public void testGetGiutar()
+    {
+        Guitar guitar = new Guitar("123", 50, "Jimmy", "B", "Electric", "Maple", "Alder");
+        Guitar retrievedGuitar = inventoryRepository.getGuitar(serialNumber);
+        assertNotNull(retrievedGuitar);
+        assertEquals(guitar, retrievedGuitar);
+    }
+
+    @Test
+    public void testSearch()
+    {
+        Guitar guitar = new Guitar("123", 50, "Jimmy", "B", "Electric", "Maple", "Alder");
+        List<Guitar> matchingGuitars = inventoryRepository.search(guitar);
+        assertNotNull(matchingGuitars);
+        assertEquals(1, matchingGuitars.size());
+        assertEquals("Jimmy", matchingGuitars.get(0).getBuilder());
+    }
+}
